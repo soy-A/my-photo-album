@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -17,6 +18,18 @@ public class Main{
 		/* 사진 리스트 생성(파일명, 년, 월, 일 포함) */
 		ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
 		photoList = GetPhoto.getPhotoList(userPath);
+		
+		/* test용도로 File[]만듦 - 수정할 것 */
+		File[] tests = new File[1];
+		int temp = 0;
+		for(HashMap<String, Object> i : photoList) {
+			File test = new File(userPath + File.separator + i.get("filefullname"));
+			tests[temp] = test;
+			temp++;
+		}
+
+		/* 선택한 파일을 앨범 폴더에 추가 */
+		AddToAlbum.addToAlbum(tests, albumPath);
 	}
 
 }
