@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,macos,java,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,macos,java,git
 
+### Local ###
+album/
+
 ### Eclipse ###
 .metadata
 bin/
