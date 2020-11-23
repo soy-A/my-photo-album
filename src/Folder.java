@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.IOException;
 
 public class Folder {
 	
@@ -12,7 +11,15 @@ public class Folder {
 		
 		final String path = System.getProperty("user.dir") + "/" + dirname;
 		File folder = new File(path);
-		folder.mkdir();
+		
+		if (!folder.exists()) {
+			try {
+				folder.mkdir();
+			} catch(Exception e) {
+				e.getStackTrace();
+			}
+		}
+		
 		return path;
 		
 	}
