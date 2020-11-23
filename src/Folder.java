@@ -9,7 +9,7 @@ public class Folder {
 	/* 파일을 관리할 폴더 만듦 */
 	public String makedir() {
 		
-		final String path = System.getProperty("user.dir") + "/" + dirname;
+		final String path = System.getProperty("user.dir") + File.separator + dirname;
 		File folder = new File(path);
 		
 		if (!folder.exists()) {
