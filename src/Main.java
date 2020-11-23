@@ -29,7 +29,10 @@ public class Main{
 		}
 
 		/* 선택한 파일을 앨범 폴더에 추가 */
-		AddToAlbum.addToAlbum(tests, albumPath);
+		Album.addToAlbum(tests, albumPath);
+		
+		/* 선택한 파일을 앨범 폴더에서 삭제 */
+//		Album.deleteFromAlbum(tests[0], albumPath);
 	}
 
 }

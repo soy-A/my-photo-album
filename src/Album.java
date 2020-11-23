@@ -3,8 +3,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class AddToAlbum {
+public class Album {
 	
+	/* 앨범에 추가 */
 	public static void addToAlbum(File[] targetFiles, String albumPath) {	// 선택한 파일들은 파일리스트에 넣어둘 것
 		
 		for(File file : targetFiles) {
@@ -46,4 +47,20 @@ public class AddToAlbum {
 		}
 	}
 	
+	
+	/* 앨범에서 삭제 */
+	public static void deleteFromAlbum(File targetFile, String albumPath) {
+		
+		File temp = new File(albumPath + File.separator + targetFile.getName());
+		
+		try {
+			
+			temp.delete();
+			
+		} catch (Exception e) {
+			
+			e.getStackTrace();
+			
+		}
+	}
 }
