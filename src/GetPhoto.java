@@ -35,6 +35,7 @@ public class GetPhoto {
 						
 						HashMap<String, Object> photo = new HashMap<String, Object>();
 						photo.put("filename", onlyFileName);
+						photo.put("filefullname", fileFullName);
 						photo.put("fileyear", year.format(fileDate));
 						photo.put("filemonth", month.format(fileDate));
 						photo.put("fileday", day.format(fileDate));
