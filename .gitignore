@@ -2,7 +2,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,macos,java,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,macos,java,git
 
-### Local ###
+### Local test ###
 album/
 
 ### Eclipse ###
@@ -70,6 +70,12 @@ local.properties
 ### Eclipse Patch ###
 # Spring Boot Tooling
 .sts4-cache/
+
+# Eclipse Core
+.project
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
