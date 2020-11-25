@@ -33,6 +33,9 @@ public class Main{
 		
 		/* 선택한 파일을 앨범 폴더에서 삭제 */
 //		Album.deleteFromAlbum(tests[0], albumPath);
+		
+		GUI gui = new GUI();
+		gui.setVisible(true);
 	}
 
 }
