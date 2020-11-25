@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class GetPhoto {
 	
 	private static String image_extension = "jpg,jpeg,png,gif,swf,bmp";	// 이미지 파일 확장자
+	static File[] fileList;
 	
 	public static ArrayList<HashMap<String, Object>> getPhotoList(String userPath){
 		
@@ -15,7 +16,7 @@ public class GetPhoto {
 		
 		if(userFile.exists() && userFile.isDirectory()) {
 			
-			File[] fileList = userFile.listFiles();
+			fileList = userFile.listFiles();
 			
 			for (File tempFile : fileList) {
 				
