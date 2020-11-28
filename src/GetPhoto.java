@@ -1,12 +1,12 @@
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
-import javax.imageio.ImageIO;
 
 public class GetPhoto {
 	
@@ -32,48 +32,39 @@ public class GetPhoto {
 					String onlyFileExt = (fileFullName.substring(fileFullName.lastIndexOf(".")+1)).toLowerCase();
 					String onlyFileName = fileFullName.toLowerCase().substring(0, fileFullName.lastIndexOf("."));
 					
-					SimpleDateFormat year = new SimpleDateFormat("yyyy");
-					SimpleDateFormat month = new SimpleDateFormat("MM");
-					SimpleDateFormat day = new SimpleDateFormat("dd");
-					Date fileDate = new Date(tempFile.lastModified());
-					
-					if(image_extension.contains(onlyFileExt)) {	// 확장자 확인
+					String year_format = "yyyy";
+					String month_format = "MM";
+					String day_format = "dd";
+					String dateTime_format = "yyyy년 MM월 dd일 a hh:mm:ss";
+					BasicFileAttributes attrs;
+					try {
+						attrs = Files.readAttributes(tempFile.toPath(), BasicFileAttributes.class);
+						FileTime time = attrs.creationTime();
 						
-						HashMap<String, Object> photo = new HashMap<String, Object>();
-						photo.put("filename", onlyFileName);
-						photo.put("filefullname", fileFullName);
-						photo.put("fileyear", year.format(fileDate));
-						photo.put("filemonth", month.format(fileDate));
-						photo.put("fileday", day.format(fileDate));
+						SimpleDateFormat year = new SimpleDateFormat(year_format);
+						SimpleDateFormat month = new SimpleDateFormat(month_format);
+						SimpleDateFormat day = new SimpleDateFormat(day_format);
+						SimpleDateFormat dateTime = new SimpleDateFormat(dateTime_format);
 						
-						photoList.add(photo);
+						if(image_extension.contains(onlyFileExt)) {	// 확장자 확인
+							
+							HashMap<String, Object> photo = new HashMap<String, Object>();
+							photo.put("filename", onlyFileName);
+							photo.put("filefullname", fileFullName);
+							photo.put("fileyear", year.format(new Date(time.toMillis())));
+							photo.put("filemonth", month.format(new Date(time.toMillis())));
+							photo.put("fileday", day.format(new Date(time.toMillis())));
+							photo.put("filedatetime", dateTime.format(new Date(time.toMillis())));
+							
+							photoList.add(photo);
+						}
+						
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 				}
 			}
 		}
 		return photoList;
 	}
-	
-	/* 사용하지 않을 확률 높음@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 삭제할것 */
-/*	public static BufferedImage[] getPhotoFromAlbum() {
-		
-		ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
-		photoList = Key.bringKeys();
-		File album = new File(Main.albumPath);
-		File[] albumList;
-		albumList = album.listFiles();
-		BufferedImage[] img = new BufferedImage[photoList.size()];
-		
-		for (int i = 0; i < albumList.length; i++) {
-			if(!albumList[i].getName().equals("Key")) {
-				try {
-					img[i] = ImageIO.read(albumList[i]);
-				} catch(IOException e) {
-					e.getStackTrace();
-				}
-			}
-		}
-		return img;
-	}
-	*/
 }
