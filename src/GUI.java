@@ -17,6 +17,9 @@ public class GUI extends JFrame {
 	
 	private JPanel contentPane;
 	private JTextField searchField;
+	public static JPanel main_panel = new JPanel();
+	public static AllPanel all_panel = new AllPanel();
+	public static PathPanel path_panel = new PathPanel();
 
 	public GUI() {
 		setSize(900, 600);
@@ -35,19 +38,16 @@ public class GUI extends JFrame {
 		contentPane.add(sidebar_panel, BorderLayout.WEST);
 		sidebar_panel.setLayout(new BoxLayout(sidebar_panel, BoxLayout.Y_AXIS));	// 버튼을 정렬하기 위한 레이아웃
 		
-		/* 메인 패널 */
-		JPanel main_panel = new JPanel();
+		/* 메인 패널 설정 */
 		contentPane.add(main_panel, BorderLayout.CENTER);
 		main_panel.setLayout(new BorderLayout(0, 0));
-		
-		PathPanel path_panel = new PathPanel();
-		AllPanel all_panel = new AllPanel();
-		
+
 		/* 사이드바 버튼 액션 설정 */
 		JButton path_button = new JButton("사진 가져오기");
 		path_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				main_panel.removeAll();
+				path_panel = new PathPanel();
 				main_panel.add(path_panel);
 				main_panel.updateUI();
 			}
@@ -56,6 +56,7 @@ public class GUI extends JFrame {
 		all_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				main_panel.removeAll();
+				all_panel = new AllPanel();
 				main_panel.add(all_panel);
 				main_panel.updateUI();
 			}
