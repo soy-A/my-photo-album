@@ -49,9 +49,9 @@ public class Album {
 	
 	
 	/* 앨범에서 삭제 */
-	public static void deleteFromAlbum(File targetFile, String albumPath) {
+	public static void deleteFromAlbum(String fileName, String albumPath) {
 		
-		File temp = new File(albumPath + File.separator + targetFile.getName());
+		File temp = new File(albumPath + File.separator + fileName);
 		
 		try {
 			
