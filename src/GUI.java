@@ -35,13 +35,31 @@ public class GUI extends JFrame {
 		contentPane.add(sidebar_panel, BorderLayout.WEST);
 		sidebar_panel.setLayout(new BoxLayout(sidebar_panel, BoxLayout.Y_AXIS));	// 버튼을 정렬하기 위한 레이아웃
 		
-		/* 사이드바 버튼 설정 */
+		/* 메인 패널 */
+		JPanel main_panel = new JPanel();
+		contentPane.add(main_panel, BorderLayout.CENTER);
+		main_panel.setLayout(new BorderLayout(0, 0));
+		
+		PathPanel path_panel = new PathPanel();
+		AllPanel all_panel = new AllPanel();
+		
+		/* 사이드바 버튼 액션 설정 */
 		JButton path_button = new JButton("사진 가져오기");
 		path_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				main_panel.removeAll();
+				main_panel.add(path_panel);
+				main_panel.updateUI();
 			}
 		});
 		JButton all_button = new JButton("모든 사진");
+		all_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main_panel.removeAll();
+				main_panel.add(all_panel);
+				main_panel.updateUI();
+			}
+		});
 		JButton favourite_button = new JButton("좋아하는 사진");
 		JButton tag_button = new JButton("태그");
 		JButton album_button = new JButton("나의 앨범");
@@ -76,8 +94,6 @@ public class GUI extends JFrame {
 			}
 		});
 		searchbar_panel.add(search_button);
-		
-		add(new PathPanel());
-		
+
 	}
 }
