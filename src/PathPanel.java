@@ -10,6 +10,7 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,7 +23,6 @@ import javax.swing.JTextField;
 
 public class PathPanel extends JPanel{
 
-	private int flag = 0;
 	private JTextField path_text;
 	
 	/* 아래 두개는 스크롤 문제를 해결하지 못할 시 다시 코드 안쪽 (final)로 되돌려놓을 것 */
@@ -55,6 +55,7 @@ public class PathPanel extends JPanel{
 				/* 사진 리스트 생성(파일명, 년, 월, 일 포함) */
 				ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
 				photoList = GetPhoto.getPhotoList(userPath);
+				final ArrayList<HashMap<String, Object>> fin_photoList = new ArrayList<HashMap<String, Object>>(photoList);
 				int photoListSize = photoList.size();
 				
 				/* <사진 가져오기 - 메인> 패널 */
@@ -72,17 +73,27 @@ public class PathPanel extends JPanel{
 				JCheckBox photo_check[] = new JCheckBox[photoList.size()];
 				ImageIcon photo_icon[] = new ImageIcon[photoList.size()];
 				Dimension icon_size = new Dimension(145, 145);
-				int selected_index[] = new int[photoListSize];
+				ArrayList<Integer> selected_index = new ArrayList<Integer>();
 				
 				class PhotoItem implements ItemListener{
 
+					/* 선택된 사진을 표시하며, 선택된 인덱스를 저장 */
 					@Override
 					public void itemStateChanged(ItemEvent e) {
 						for(int i = 0; i < photoListSize; i++) {
 							if(e.getItem() == photo_check[i]) {
-								photo_check[i].setOpaque(true);		// 선택 표시
-								selected_index[flag] = i;
-								flag++;
+								if(e.getStateChange() == ItemEvent.SELECTED) {
+									photo_check[i].setOpaque(true);		// 선택 표시
+									selected_index.add(i);
+								}
+								else if(e.getStateChange() == ItemEvent.DESELECTED) {
+									photo_check[i].setOpaque(false);
+									for(int j = 0; j < selected_index.size(); j++) {
+										if(selected_index.get(j) == i) {
+											selected_index.remove(j);
+										}
+									}
+								}
 							}
 						}
 					}
@@ -128,11 +139,15 @@ public class PathPanel extends JPanel{
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						File selected_photo[] = new File[selected_index.length];
-						for(int i = 0; i < selected_index.length; i++) {
-							selected_photo[i] = GetPhoto.fileList[selected_index[i]];
+						File selected_photo[] = new File[selected_index.size()];
+						ArrayList<HashMap<String, Object>> selected_list = new ArrayList<HashMap<String, Object>>();
+						
+						for(int i = 0; i < selected_index.size(); i++) {
+							selected_photo[i] = new File(userPath + File.separator + fin_photoList.get(selected_index.get(i)).get("filefullname"));
+							selected_list.add(i, fin_photoList.get(selected_index.get(i)));
 						}
 						Album.addToAlbum(selected_photo, Main.albumPath);
+						Key.addToKey(selected_list);
 						JOptionPane.showMessageDialog(null, "사진이 추가되었습니다.");
 					}
 					
