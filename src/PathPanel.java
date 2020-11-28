@@ -27,6 +27,7 @@ public class PathPanel extends JPanel{
 	/* 아래 두개는 스크롤 문제를 해결하지 못할 시 다시 코드 안쪽 (final)로 되돌려놓을 것 */
 	private int height;
 	private JScrollPane scrollPane;
+	private static ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
 	
 	/* <사진 가져오기> 패널 */
 	public PathPanel() {
@@ -51,11 +52,8 @@ public class PathPanel extends JPanel{
 				
 				String userPath = path_text.getText();	// 입력받은 경로
 				
-				/* 사진 리스트 생성(파일명, 년, 월, 일 포함) */
-				ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
+				/* 사진 리스트 생성(파일명, 년, 월, 일 포함) */			
 				photoList = GetPhoto.getPhotoList(userPath);
-				final ArrayList<HashMap<String, Object>> fin_photoList = new ArrayList<HashMap<String, Object>>(photoList);
-				int photoListSize = photoList.size();
 				
 				/* <사진 가져오기 - 메인> 패널 */
 				JPanel image_panel = new JPanel();
@@ -79,7 +77,7 @@ public class PathPanel extends JPanel{
 					/* 선택된 사진을 표시하며, 선택된 인덱스를 저장 */
 					@Override
 					public void itemStateChanged(ItemEvent e) {
-						for(int i = 0; i < photoListSize; i++) {
+						for(int i = 0; i < photoList.size(); i++) {
 							if(e.getItem() == photo_check[i]) {
 								if(e.getStateChange() == ItemEvent.SELECTED) {
 									photo_check[i].setOpaque(true);		// 선택 표시
@@ -142,8 +140,8 @@ public class PathPanel extends JPanel{
 						ArrayList<HashMap<String, Object>> selected_list = new ArrayList<HashMap<String, Object>>();
 						
 						for(int i = 0; i < selected_index.size(); i++) {
-							selected_photo[i] = new File(userPath + File.separator + fin_photoList.get(selected_index.get(i)).get("filefullname"));
-							selected_list.add(i, fin_photoList.get(selected_index.get(i)));
+							selected_photo[i] = new File(userPath + File.separator + photoList.get(selected_index.get(i)).get("filefullname"));
+							selected_list.add(i, photoList.get(selected_index.get(i)));
 						}
 						Album.addToAlbum(selected_photo, Main.albumPath);
 						Key.addToKey(selected_list);
