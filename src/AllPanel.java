@@ -5,9 +5,11 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,18 +17,13 @@ import javax.swing.JScrollPane;
 
 public class AllPanel extends JPanel{
 	
-//	private JPanel contentPane;
+	private static ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
 	
 	public AllPanel() {
 		
 		setLayout(new BorderLayout(0, 0));
 		
-		ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
 		photoList = Key.bringKeys();
-		
-		/* album폴더의 이미지파일들을 bufferedImage의 배열로 가져옴 */
-//		BufferedImage[] photoList;
-//		photoList = GetPhoto.getPhotoFromAlbum();
 			
 		/* "모든 사진"의 패널, scrollPane */
 		JPanel image_panel = new JPanel();
@@ -48,7 +45,21 @@ public class AllPanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount()==2) {
+					removeAll();
+					for (int j = 0; j < photoList.size(); j++) {
+						if(e.getSource() == photo_label[j]) {
+							try {
+								Image image = ImageIO.read(new File(Main.albumPath + File.separator + photoList.get(j).get("filefullname")));
+								PhotoPanel photo_panel = new PhotoPanel(image, photoList, j);
+								add(photo_panel);
+							} catch(IOException e1) {
+								e1.getStackTrace();
+							}
+
+						}
+					}
 					
+					updateUI();
 				}
 				
 			}
@@ -66,8 +77,8 @@ public class AllPanel extends JPanel{
 			Image img = photo_icon[i].getImage().getScaledInstance(135, 135, Image.SCALE_SMOOTH);
 			photo_icon[i] = new ImageIcon(img);
 			photo_label[i] = new JLabel(photo_icon[i]);
-			photo_label[i].addMouseListener(new Mouse());
 			photo_label[i].setPreferredSize(icon_size);
+			photo_label[i].addMouseListener(new Mouse());
 			image_panel.add(photo_label[i]);
 			
 		}
