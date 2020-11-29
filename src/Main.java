@@ -1,4 +1,3 @@
-
 public class Main{
 	
 	static String albumPath;
@@ -6,11 +5,8 @@ public class Main{
 	public static void main(String[] args) {
 		
 		/* 앨범으로 사용할 폴더를 생성 */
-		Folder folder = new Folder("album");
-		albumPath = folder.makedir();
-		
-		/* 선택한 파일을 앨범 폴더에서 삭제 */
-//		Album.deleteFromAlbum(tests[0], albumPath);
+		Folder album = new Folder("album");
+		albumPath = album.makedir();
 		
 		/* GUI */
 		GUI gui = new GUI();
