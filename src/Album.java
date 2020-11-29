@@ -1,9 +1,17 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.JTextArea;
+
 public class Album {
+	
+	static String memoPath = Main.albumPath + File.separator + "memo";
 	
 	/* 앨범에 추가 */
 	public static void addToAlbum(File[] targetFiles, String albumPath) {	// 선택한 파일들은 파일리스트에 넣어둘 것
@@ -49,9 +57,9 @@ public class Album {
 	
 	
 	/* 앨범에서 삭제 */
-	public static void deleteFromAlbum(String fileName, String albumPath) {
+	public static void deleteFromAlbum(String fileName) {
 		
-		File temp = new File(albumPath + File.separator + fileName);
+		File temp = new File(Main.albumPath + File.separator + fileName);
 		
 		try {
 			
@@ -62,5 +70,51 @@ public class Album {
 			e.getStackTrace();
 			
 		}
+	}
+	
+	public static void addToMemo(String fileName, String memo) {
+		
+		Folder memo_folder = new Folder("album" + File.separator + "memo");
+		String memoPath = memo_folder.makedir();
+		
+		try {
+			
+			FileWriter fw = new FileWriter(memoPath + File.separator + fileName + ".txt");
+			BufferedWriter bf = new BufferedWriter(fw);
+			
+			bf.write(memo);
+			bf.close();
+			
+		} catch (Exception e) {
+			
+			e.getStackTrace();
+			
+		}
+	}
+	
+	/* 저장된 메모를 읽어옴 */
+	public static void getSavedMemo(String fileName, JTextArea textArea) {
+
+		try {
+			
+			FileReader fr = new FileReader(memoPath + File.separator + fileName + ".txt");
+			BufferedReader br = new BufferedReader(fr);
+			
+			String str = null;
+			
+			while((str = br.readLine()) != null) {
+				
+				textArea.append(str + "\n");
+				
+			}
+			
+			br.close();
+			
+		} catch (Exception e) {
+			
+			e.getStackTrace();
+			
+		}
+
 	}
 }
