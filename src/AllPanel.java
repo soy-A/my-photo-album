@@ -17,13 +17,11 @@ import javax.swing.JScrollPane;
 
 public class AllPanel extends JPanel{
 	
-	private static ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
-	
-	public AllPanel() {
+	public AllPanel(ArrayList<HashMap<String, Object>> photoList) {
 		
 		setLayout(new BorderLayout(0, 0));
 		
-		photoList = Key.bringKeys();
+		ArrayList<HashMap<String, Object>> fin_photoList = new ArrayList<HashMap<String, Object>>(photoList);
 			
 		/* "모든 사진"의 패널, scrollPane */
 		JPanel image_panel = new JPanel();
@@ -33,7 +31,7 @@ public class AllPanel extends JPanel{
 		JScrollPane all_scrollPane = new JScrollPane(image_panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		add(all_scrollPane, BorderLayout.CENTER);
 		all_scrollPane.setViewportView(image_panel);
-		
+
 		/* bufferedImage의 사진들을 Label에 ImageIcon 타입으로 넣어줌 */
 		JLabel photo_label[] = new JLabel[photoList.size()];
 		ImageIcon photo_icon[] = new ImageIcon[photoList.size()];
@@ -46,11 +44,11 @@ public class AllPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount()==2) {
 					removeAll();
-					for (int j = 0; j < photoList.size(); j++) {
+					for (int j = 0; j < fin_photoList.size(); j++) {
 						if(e.getSource() == photo_label[j]) {
 							try {
-								Image image = ImageIO.read(new File(Main.albumPath + File.separator + photoList.get(j).get("filefullname")));
-								PhotoPanel photo_panel = new PhotoPanel(image, photoList, j);
+								Image image = ImageIO.read(new File(Main.albumPath + File.separator + fin_photoList.get(j).get("filefullname")));
+								PhotoPanel photo_panel = new PhotoPanel(image, fin_photoList, j);
 								add(photo_panel);
 							} catch(IOException e1) {
 								e1.getStackTrace();
