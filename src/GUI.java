@@ -2,11 +2,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -18,7 +21,7 @@ public class GUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField searchField;
 	public static JPanel main_panel = new JPanel();
-	public static AllPanel all_panel = new AllPanel();
+	public static AllPanel all_panel = new AllPanel(Key.bringKeys("Key"));
 	public static PathPanel path_panel = new PathPanel();
 
 	public GUI() {
@@ -56,12 +59,20 @@ public class GUI extends JFrame {
 		all_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				main_panel.removeAll();
-				all_panel = new AllPanel();
+				all_panel = new AllPanel(Key.bringKeys("Key"));
 				main_panel.add(all_panel);
 				main_panel.updateUI();
 			}
 		});
 		JButton favourite_button = new JButton("좋아하는 사진");
+		favourite_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main_panel.removeAll();
+				all_panel = new AllPanel(Key.bringKeys("Like"));
+				main_panel.add(all_panel);
+				main_panel.updateUI();
+			}
+		});
 		JButton tag_button = new JButton("태그");
 		JButton album_button = new JButton("나의 앨범");
 		
@@ -78,22 +89,103 @@ public class GUI extends JFrame {
 		contentPane.add(searchbar_panel, BorderLayout.NORTH);
 		
 		/* 검색 유형 선택 */
-		String serchType[] = {"파일명", "확장자", "날짜"};
+		String serchType[] = {"파일명", "날짜", "메모"};
 		JComboBox search_combobox = new JComboBox(serchType);
-		searchbar_panel.add(search_combobox);
 		
 		/* 상단 검색 영역 */
 		searchField = new JTextField();
 		searchField.setHorizontalAlignment(SwingConstants.CENTER);
 		searchField.setColumns(30);
-		searchbar_panel.add(searchField);
 		
 		/* 상단 검색 버튼 */
 		JButton search_button = new JButton("검색");
 		search_button.addActionListener(new ActionListener() {
+
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				String type = search_combobox.getSelectedItem().toString();
+				if(type.equals("파일명")) {
+					search_button.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							AllPanel search_panel;
+							main_panel.removeAll();
+							ArrayList<HashMap<String, Object>> foundPhotoList = new ArrayList<HashMap<String, Object>>();
+							String searchTerm = searchField.getText();
+							
+							for(HashMap<String, Object> photo : Key.bringKeys("Key")) {
+								
+								if(((String) photo.get("filefullname")).contains(searchTerm)) {
+									
+									foundPhotoList.add(photo);
+									
+								}
+							}
+							if(foundPhotoList.size() == 0) {
+								JOptionPane.showMessageDialog(null, "검색 결과가 없습니다.");
+							}
+							search_panel = new AllPanel(foundPhotoList);
+							main_panel.add(search_panel);
+							main_panel.updateUI();
+	
+						}
+					});
+					
+				} else if(type.equals("날짜")) {
+					search_button.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							AllPanel search_panel;
+							main_panel.removeAll();
+							ArrayList<HashMap<String, Object>> foundPhotoList = new ArrayList<HashMap<String, Object>>();
+							String searchTerm = searchField.getText();
+							
+							for(HashMap<String, Object> photo : Key.bringKeys("Key")) {
+								
+								if(((String) photo.get("fileyear") + photo.get("filemonth") + photo.get("fileday")).contains(searchTerm)) {
+									
+									foundPhotoList.add(photo);
+									
+								}
+							}
+							if(foundPhotoList.size() == 0) {
+								JOptionPane.showMessageDialog(null, "검색 결과가 없습니다.");
+							}
+							search_panel = new AllPanel(foundPhotoList);
+							main_panel.add(search_panel);
+							main_panel.updateUI();
+						}
+					});
+					
+				} else if(type.equals("메모")){
+					search_button.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							AllPanel search_panel;
+							main_panel.removeAll();
+							ArrayList<HashMap<String, Object>> foundPhotoList = new ArrayList<HashMap<String, Object>>();
+							String searchTerm = searchField.getText();
+							
+							for(HashMap<String, Object> photo : Key.bringKeys("Key")) {
+								String memo = Album.getSavedMemo_str((String) photo.get("filename"));
+								if(memo != null && memo.contains(searchTerm)) {
+									
+									foundPhotoList.add(photo);
+									
+								}
+							}
+							if(foundPhotoList.size() == 0) {
+								JOptionPane.showMessageDialog(null, "검색 결과가 없습니다.");
+							}
+							search_panel = new AllPanel(foundPhotoList);
+							main_panel.add(search_panel);
+							main_panel.updateUI();
+						}
+					});
+					
+				}
 			}
+			
 		});
+		searchbar_panel.add(search_combobox);
+		searchbar_panel.add(searchField);
 		searchbar_panel.add(search_button);
 
 	}
