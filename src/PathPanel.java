@@ -144,7 +144,7 @@ public class PathPanel extends JPanel{
 							selected_list.add(i, photoList.get(selected_index.get(i)));
 						}
 						Album.addToAlbum(selected_photo, Main.albumPath);
-						Key.addToKey(selected_list);
+						Key.addToKey(selected_list, "Key");
 						JOptionPane.showMessageDialog(null, "사진이 추가되었습니다.");
 					}
 					
