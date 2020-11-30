@@ -72,6 +72,7 @@ public class Album {
 		}
 	}
 	
+	/* 메모를 파일로 내보냄 */
 	public static void addToMemo(String fileName, String memo) {
 		
 		Folder memo_folder = new Folder("album" + File.separator + "memo");
@@ -84,6 +85,24 @@ public class Album {
 			
 			bf.write(memo);
 			bf.close();
+			
+		} catch (Exception e) {
+			
+			e.getStackTrace();
+			
+		}
+	}
+	
+	/* 파일을 삭제할 때 메모도 같이 삭제함 */
+	public static void deleteFromMemo(String fileName) {
+		
+		File temp = new File(Main.albumPath + File.separator + "memo" + File.separator + fileName + ".txt");
+				
+		try {
+			
+			if(temp.exists()) {
+				temp.delete();
+			}
 			
 		} catch (Exception e) {
 			
@@ -117,4 +136,34 @@ public class Album {
 		}
 
 	}
+	
+	/* 저장된 메모를 읽어옴(String) */
+	public static String getSavedMemo_str(String fileName) {
+
+		String string = "";
+		
+		try {
+			
+			FileReader fr = new FileReader(memoPath + File.separator + fileName + ".txt");
+			BufferedReader br = new BufferedReader(fr);
+			String str;
+
+			while((str = br.readLine()) != null) {
+				
+				string = string + "\n" + str;
+				
+			}
+			
+			br.close();
+			
+		} catch (Exception e) {
+			
+			e.getStackTrace();
+			
+		}
+		
+		return string;
+
+	}
+
 }
