@@ -86,6 +86,23 @@ public class PhotoPanel extends JPanel {
 		date_label.setHorizontalAlignment(SwingConstants.CENTER);
 		info_panel.add(date_label, BorderLayout.CENTER);
 		
+		/* 좋아요 버튼을 누른 사진들은 '좋아하는 사진'탭에서 확인할 수 있다 */
+		JButton like_button = new JButton("♥");
+		like_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<HashMap<String, Object>> likedList = Key.bringKeys("Like");
+				if(likedList.contains(photoList.get(i))) {
+					Key.deleteKey(likedList, photoList.get(i), "Like");
+					JOptionPane.showMessageDialog(null, "좋아하는 사진에서 삭제되었습니다.");
+				} else {
+					likedList.add(photoList.get(i));
+					Key.addToKey(likedList, "Like");
+					JOptionPane.showMessageDialog(null, "좋아하는 사진에 추가되었습니다.");
+				}
+			}
+		});
+		east_panel.add(like_button);
+		
 		/* 메모 버튼을 누르면 저장된 메모를 보여주며, 메모를 할 수 있는 창을 띄운다 */
 		JButton memo_button = new JButton("메모");
 		memo_button.addActionListener(new ActionListener() {
@@ -129,13 +146,7 @@ public class PhotoPanel extends JPanel {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-//						memo_panel.setVisible(false);
-//						memo_panel.removeAll();
-//						big_image_panel.removeAll();
-//						big_image_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-//						big_image_panel.add(resized_label);
-//						big_image_panel.updateUI();
-//						memo_panel.updateUI();
+
 					}
 					
 				});
@@ -153,10 +164,11 @@ public class PhotoPanel extends JPanel {
 				int delete = JOptionPane.showConfirmDialog(null, "정말로 삭제하시겠습니까?", "삭제", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(delete == JOptionPane.YES_OPTION) {
 					Album.deleteFromAlbum((String)photoList.get(i).get("filefullname"));
-					Key.deleteKey(photoList, i);
+					Album.deleteFromMemo((String)photoList.get(i).get("filename"));
+					Key.deleteKey(photoList, photoList.get(i), "Key");
 					JOptionPane.showMessageDialog(null, "사진이 삭제되었습니다.");
 					GUI.main_panel.removeAll();
-					GUI.all_panel = new AllPanel();
+					GUI.all_panel = new AllPanel(Key.bringKeys("Key"));
 					GUI.main_panel.add(GUI.all_panel);
 					GUI.main_panel.updateUI();
 				}
@@ -169,7 +181,7 @@ public class PhotoPanel extends JPanel {
 		back_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				GUI.main_panel.removeAll();
-				GUI.all_panel = new AllPanel();
+				GUI.all_panel = new AllPanel(Key.bringKeys("Key"));
 				GUI.main_panel.add(GUI.all_panel);
 				GUI.main_panel.updateUI();
 			}
