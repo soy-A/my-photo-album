@@ -9,11 +9,10 @@ import java.util.HashMap;
 
 public class Key {
 	
-	private static File album_Key = new File(Main.albumPath + File.separator + "Key");	// 앨범에 key파일을 생성
-	
 	/* 선택한 사진들의 key-value 정보를 key파일로 내보냄 */
-	public static void addToKey(ArrayList<HashMap<String, Object>> selected_list){
+	public static void addToKey(ArrayList<HashMap<String, Object>> selected_list, String Key){
 
+		File album_Key = new File(Main.albumPath + File.separator + Key);
 		ArrayList<HashMap<String, Object>> brought_list = new ArrayList<HashMap<String, Object>>();
 		ObjectOutputStream oos = null;
 		
@@ -21,11 +20,15 @@ public class Key {
 			
 			if(album_Key.exists()) {
 				
-				brought_list = bringKeys();
+				brought_list = bringKeys(Key);
 				
 				for(int i = 0; i < selected_list.size(); i++) {
 					
-					brought_list.add(selected_list.get(i));
+					if(!brought_list.contains(selected_list.get(i))) {
+						
+						brought_list.add(selected_list.get(i));
+						
+					}
 					
 				}
 				
@@ -50,8 +53,9 @@ public class Key {
 	}
 	
 	/* key파일로부터 key-value값을 읽어옴 */
-	public static ArrayList<HashMap<String, Object>> bringKeys(){
+	public static ArrayList<HashMap<String, Object>> bringKeys(String Key){
 		
+		File album_Key = new File(Main.albumPath + File.separator + Key);
 		ArrayList<HashMap<String, Object>> key = new ArrayList<HashMap<String, Object>>();
 		ObjectInputStream ois = null;
 		
@@ -77,10 +81,11 @@ public class Key {
 	}
 	
 	/* 지우고자 하는 사진의 key-value를 지우고 저장함 */
-	public static void deleteKey(ArrayList<HashMap<String, Object>> photoList, int i) {
+	public static void deleteKey(ArrayList<HashMap<String, Object>> photoList, HashMap<String, Object> photo, String Key) {
 		
+		File album_Key = new File(Main.albumPath + File.separator + Key);
 		ObjectOutputStream oos = null;
-		photoList.remove(i);
+		photoList.remove(photo);
 		
 		try {
 			
