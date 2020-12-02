@@ -25,7 +25,8 @@ public class PhotoPanel extends JPanel {
 		
 		BufferedImage resized_bufimage;
 		Image resized_image;
-			
+		
+		//	비율 계산
 		double panel_ratio = panel_width / panel_height;
 		double image_width = (double)selected_image.getWidth(null);
 		double image_height = (double)selected_image.getHeight(null);

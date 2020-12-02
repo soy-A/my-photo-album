@@ -69,7 +69,7 @@ public class AllPanel extends JPanel{
 			
 		}
 
-		for(int i = 0; i < photoList.size(); i++) {
+		for(int i = 0; i < photoList.size(); i++) {	// photoList의 사진들의 아이콘을 띄운다
 			
 			photo_icon[i] = new ImageIcon(Main.albumPath + File.separator + photoList.get(i).get("filefullname"));
 			Image img = photo_icon[i].getImage().getScaledInstance(135, 135, Image.SCALE_SMOOTH);

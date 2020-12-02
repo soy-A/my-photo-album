@@ -21,7 +21,7 @@ public class GetPhoto {
 		
 		if(userFile.exists() && userFile.isDirectory()) {	// 존재하는 폴더인지 확인
 			
-			fileList = userFile.listFiles();
+			fileList = userFile.listFiles();	// 폴더의 파일들을 리스트에 가져온다
 			
 			for (File tempFile : fileList) {
 				
@@ -37,6 +37,7 @@ public class GetPhoto {
 					String day_format = "dd";
 					String dateTime_format = "yyyy년 MM월 dd일 a hh:mm:ss";
 					BasicFileAttributes attrs;
+					
 					try {
 						attrs = Files.readAttributes(tempFile.toPath(), BasicFileAttributes.class);
 						FileTime time = attrs.creationTime();
@@ -46,7 +47,7 @@ public class GetPhoto {
 						SimpleDateFormat day = new SimpleDateFormat(day_format);
 						SimpleDateFormat dateTime = new SimpleDateFormat(dateTime_format);
 						
-						if(image_extension.contains(onlyFileExt)) {	// 확장자 확인
+						if(image_extension.contains(onlyFileExt)) {	// 확장자 확인, 이미지 파일만 리스트에 삽입
 							
 							HashMap<String, Object> photo = new HashMap<String, Object>();
 							photo.put("filename", onlyFileName);

@@ -12,7 +12,7 @@ public class Folder {
 		final String path = System.getProperty("user.dir") + File.separator + dirname;
 		File folder = new File(path);
 		
-		if (!folder.exists()) {
+		if (!folder.exists()) {	// 폴더가 존재하지 않는 경우에만 새로 생성한
 			try {
 				folder.mkdir();
 			} catch(Exception e) {
