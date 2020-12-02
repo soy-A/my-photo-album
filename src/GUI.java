@@ -1,7 +1,11 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-
 
 public class GUI extends JFrame {
 	
@@ -73,15 +76,26 @@ public class GUI extends JFrame {
 				main_panel.updateUI();
 			}
 		});
-		JButton tag_button = new JButton("태그");
 		JButton album_button = new JButton("나의 앨범");
+		JButton insta_button = new JButton("인스타그램");
+		insta_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try { 
+					Desktop.getDesktop().browse(new URI("https://www.instagram.com")); 
+				} catch (IOException e1) { 
+					e1.printStackTrace(); 
+				} catch (URISyntaxException e2) { 
+						e2.printStackTrace(); 
+				}
+			}
+		});
 		
 		/* 사이드바에 버튼 추가 */
 		sidebar_panel.add(path_button);
 		sidebar_panel.add(all_button);
 		sidebar_panel.add(favourite_button);
-		sidebar_panel.add(tag_button);
 		sidebar_panel.add(album_button);
+		sidebar_panel.add(insta_button);
 		
 		/* 상단 검색 영역 패널 */
 		JPanel searchbar_panel = new JPanel();
