@@ -21,21 +21,22 @@ import javax.swing.border.EmptyBorder;
 
 public class GUI extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField searchField;
+	/* 코드 어디서든지 화면전환 할 수 있도록 public static으로 선언 */
 	public static JPanel main_panel = new JPanel();
 	public static AllPanel all_panel = new AllPanel(Key.bringKeys("Key"));
 	public static PathPanel path_panel = new PathPanel();
 	public static MyPanel my_panel = new MyPanel();
 
 	public GUI() {
+
+		/* 기본 프레임 설정 */
 		setSize(900, 600);
 		setTitle("My Photo Album");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(3, 3, 3, 3));
+		JPanel contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(3, 3, 3, 3));	// 약간의 가장자리 여백 줌
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
@@ -90,7 +91,7 @@ public class GUI extends JFrame {
 		insta_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Desktop.getDesktop().browse(new URI("https://www.instagram.com"));
+					Desktop.getDesktop().browse(new URI("https://www.instagram.com"));	// 클릭시 브라우저에서 인스타그램 페이지를 띄운다.
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				} catch (URISyntaxException e2) {
@@ -116,98 +117,28 @@ public class GUI extends JFrame {
 		JComboBox search_combobox = new JComboBox(serchType);
 
 		/* 상단 검색 영역 */
-		searchField = new JTextField();
+		JTextField searchField = new JTextField();
 		searchField.setHorizontalAlignment(SwingConstants.CENTER);
 		searchField.setColumns(30);
 
 		/* 상단 검색 버튼 */
 		JButton search_button = new JButton("검색");
 		search_button.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				String type = search_combobox.getSelectedItem().toString();
-				if (type.equals("파일명")) {
-					search_button.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							AllPanel search_panel;
-							main_panel.removeAll();
-							ArrayList<HashMap<String, Object>> foundPhotoList = new ArrayList<HashMap<String, Object>>();
-							String searchTerm = searchField.getText();
+				String searchTerm = searchField.getText();
+				
+				main_panel.removeAll();
+				AllPanel search_panel;
+				ArrayList<HashMap<String, Object>> foundPhotoList = Search.getSearchedList(searchTerm, type);
+				search_panel = new AllPanel(foundPhotoList);
+				main_panel.add(search_panel);
+				main_panel.updateUI();
 
-							for (HashMap<String, Object> photo : Key.bringKeys("Key")) {
-
-								if (((String) photo.get("filefullname")).contains(searchTerm)) {
-
-									foundPhotoList.add(photo);
-
-								}
-							}
-							if (foundPhotoList.size() == 0) {
-								JOptionPane.showMessageDialog(null, "검색 결과가 없습니다.");
-							}
-							search_panel = new AllPanel(foundPhotoList);
-							main_panel.add(search_panel);
-							main_panel.updateUI();
-
-						}
-					});
-
-				} else if (type.equals("날짜")) {
-					search_button.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							AllPanel search_panel;
-							main_panel.removeAll();
-							ArrayList<HashMap<String, Object>> foundPhotoList = new ArrayList<HashMap<String, Object>>();
-							String searchTerm = searchField.getText();
-
-							for (HashMap<String, Object> photo : Key.bringKeys("Key")) {
-
-								if (((String) photo.get("fileyear") + photo.get("filemonth") + photo.get("fileday"))
-										.contains(searchTerm)) {
-
-									foundPhotoList.add(photo);
-
-								}
-							}
-							if (foundPhotoList.size() == 0) {
-								JOptionPane.showMessageDialog(null, "검색 결과가 없습니다.");
-							}
-							search_panel = new AllPanel(foundPhotoList);
-							main_panel.add(search_panel);
-							main_panel.updateUI();
-						}
-					});
-
-				} else if (type.equals("메모")) {
-					search_button.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							AllPanel search_panel;
-							main_panel.removeAll();
-							ArrayList<HashMap<String, Object>> foundPhotoList = new ArrayList<HashMap<String, Object>>();
-							String searchTerm = searchField.getText();
-
-							for (HashMap<String, Object> photo : Key.bringKeys("Key")) {
-								String memo = Album.getSavedMemo_str((String) photo.get("filename"));
-								if (memo != null && memo.contains(searchTerm)) {
-
-									foundPhotoList.add(photo);
-
-								}
-							}
-							if (foundPhotoList.size() == 0) {
-								JOptionPane.showMessageDialog(null, "검색 결과가 없습니다.");
-							}
-							search_panel = new AllPanel(foundPhotoList);
-							main_panel.add(search_panel);
-							main_panel.updateUI();
-						}
-					});
-
-				}
 			}
-
 		});
+		
 		searchbar_panel.add(search_combobox);
 		searchbar_panel.add(searchField);
 		searchbar_panel.add(search_button);
