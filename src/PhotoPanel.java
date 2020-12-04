@@ -32,7 +32,7 @@ public class PhotoPanel extends JPanel {
 		double image_height = (double) selected_image.getHeight(null);
 		double image_ratio = image_width / image_height;
 
-		if (image_ratio <= panel_ratio) {
+		if (image_ratio <= panel_ratio) {	// 비율 같거나 패널의 비율보다 이미지의 비율이 가로로 좁을 때 - 이미지의 세로를 패널에 맞추되 비율 유지
 			image_height = panel_height;
 			image_width = panel_height * image_ratio;
 			resized_image = selected_image.getScaledInstance((int) image_width, (int) image_height, Image.SCALE_SMOOTH);
@@ -41,7 +41,7 @@ public class PhotoPanel extends JPanel {
 			g.drawImage(resized_image, 0, 0, null);
 			g.dispose();
 
-		} else {
+		} else {	// 패널의 비율보다 이미지의 비율이 가로로 넓을 때 - 이미지의 가로를 패널에 맞추되 비율 유지
 			image_width = (int) panel_width;
 			image_height = (int) (panel_width / image_ratio);
 			resized_image = selected_image.getScaledInstance((int) image_width, (int) image_height, Image.SCALE_SMOOTH);
@@ -50,22 +50,18 @@ public class PhotoPanel extends JPanel {
 			g.drawImage(resized_image, 0, 0, null);
 			g.dispose();
 		}
-
+		
 		return resized_bufimage;
-
 	}
 
 	public PhotoPanel(Image selected_image, ArrayList<HashMap<String, Object>> photoList, int i) {
 
 		setLayout(new BorderLayout(0, 0));
 
-		/* 큰 사진을 띄우는 패널 */
+		/* 큰 사진을 띄우는 패널에 크기 조정한 이미지 붙임 */
 		JPanel big_image_panel = new JPanel();
-
 		JLabel resized_label = new JLabel(new ImageIcon(resizing(selected_image, 760, 500)));
-
 		big_image_panel.add(resized_label);
-
 		add(big_image_panel, BorderLayout.CENTER);
 
 		/* 사진 위에 띄울 정보 패널 */
@@ -74,10 +70,12 @@ public class PhotoPanel extends JPanel {
 		add(info_panel, BorderLayout.NORTH);
 		info_panel.setLayout(new BorderLayout(0, 0));
 
+		/* 오른쪽 정렬 */
 		JPanel east_panel = new JPanel();
 		east_panel.setBackground(Color.LIGHT_GRAY);
 		info_panel.add(east_panel, BorderLayout.EAST);
 
+		/* 왼쪽 정렬 */
 		JPanel west_panel = new JPanel();
 		west_panel.setBackground(Color.LIGHT_GRAY);
 		info_panel.add(west_panel, BorderLayout.WEST);
@@ -108,6 +106,8 @@ public class PhotoPanel extends JPanel {
 		JButton memo_button = new JButton("메모");
 		memo_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String memoPath = Main.albumPath + File.separator + "memo";
+				
 				big_image_panel.removeAll();
 				big_image_panel.setLayout(new BorderLayout(0, 0));
 				big_image_panel.add(new JLabel(new ImageIcon(resizing(selected_image, 600, 500))), BorderLayout.CENTER);
@@ -124,33 +124,29 @@ public class PhotoPanel extends JPanel {
 
 				JTextArea memo_textArea = new JTextArea(20, 7);
 				File temp = new File(
-						Album.memoPath + File.separator + (String) photoList.get(i).get("filename") + ".txt");
-				if (temp.exists()) {
+						memoPath + File.separator + (String) photoList.get(i).get("filename") + ".txt");
+				if (temp.exists()) {	// 메모가 존재하는 경우에만 불러온다
 					Album.getSavedMemo((String) photoList.get(i).get("filename"), memo_textArea);
 				}
 				memo_scroll.setViewportView(memo_textArea);
 
 				JButton memo_save_button = new JButton("저장");
 				memo_save_button.addActionListener(new ActionListener() {
-
-					@Override
 					public void actionPerformed(ActionEvent e) {
 						String getText = memo_textArea.getText();
 						Album.addToMemo((String) photoList.get(i).get("filename"), getText);
 						JOptionPane.showMessageDialog(null, "메모가 저장되었습니다.");
 					}
-
 				});
 				memo_buttons_panel.add(memo_save_button);
 
 				JButton memo_close_button = new JButton("닫기");
-				memo_save_button.addActionListener(new ActionListener() {
-
-					@Override
+				memo_close_button.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-
+						big_image_panel.removeAll();
+						big_image_panel.add(resized_label);
+						big_image_panel.updateUI();
 					}
-
 				});
 				memo_buttons_panel.add(memo_close_button);
 
