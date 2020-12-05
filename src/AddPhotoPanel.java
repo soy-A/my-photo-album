@@ -30,10 +30,9 @@ public class AddPhotoPanel extends JFrame {
 
 		JPanel newAlbum_panel = new JPanel();
 		setContentPane(newAlbum_panel);
-
-		final ArrayList<HashMap<String, Object>> photoList = Key.bringKeys("Key");
-
 		setLayout(new BorderLayout(0, 0));
+		
+		final ArrayList<HashMap<String, Object>> photoList = Key.bringKeys("Key");
 
 		JPanel message_panel = new JPanel();
 		add(message_panel, BorderLayout.NORTH);
@@ -41,7 +40,7 @@ public class AddPhotoPanel extends JFrame {
 		Vector<String> myAlbumName = new Vector<String>();
 		myAlbumName = MyPanel.bringAlbumNames();
 
-		JLabel message_label = new JLabel("사진, 적용 앨범을 선택한 후 \"추가 \" 또는 \"삭제\"버튼을 눌러주세요.");
+		JLabel message_label = new JLabel("사진을 추가할 앨범과 추가할 사진을 선택한 후 \"추가 \"버튼을 눌러주세요.");
 		message_panel.add(message_label);
 
 		JPanel image_panel = new JPanel();
@@ -62,7 +61,6 @@ public class AddPhotoPanel extends JFrame {
 		class PhotoItem implements ItemListener {
 
 			/* 선택된 사진을 표시하며, 선택된 인덱스를 저장 */
-			@Override
 			public void itemStateChanged(ItemEvent e) {
 				for (int i = 0; i < photoList.size(); i++) {
 					if (e.getItem() == photo_check[i]) {
@@ -99,7 +97,6 @@ public class AddPhotoPanel extends JFrame {
 
 		JButton add_button = new JButton("추가");
 		add_button.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				String selectedAlbum = album_combobox.getSelectedItem().toString();
 				ArrayList<HashMap<String, Object>> selected_list = new ArrayList<HashMap<String, Object>>();
@@ -107,29 +104,13 @@ public class AddPhotoPanel extends JFrame {
 				for (int i = 0; i < selected_index.size(); i++) {
 					selected_list.add(i, photoList.get(selected_index.get(i)));
 				}
+				
 				Key.addToKey(selected_list, selectedAlbum);
 				JOptionPane.showMessageDialog(null, "사진이 추가되었습니다.");
 				setVisible(false);
 			}
 		});
 		message_panel.add(add_button);
-
-		JButton delete_button = new JButton("삭제");
-		delete_button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String selectedAlbum = album_combobox.getSelectedItem().toString();
-				ArrayList<HashMap<String, Object>> selected_list = new ArrayList<HashMap<String, Object>>();
-
-				for (int i = 0; i < selected_index.size(); i++) {
-					selected_list.add(i, photoList.get(selected_index.get(i)));
-				}
-				Key.deleteKeyFromAlbum(selected_list, selectedAlbum);
-				JOptionPane.showMessageDialog(null, "사진이 삭제되었습니다.");
-				setVisible(false);
-			}
-		});
-		message_panel.add(delete_button);
 
 		setSize(630, 500);
 		setResizable(false);

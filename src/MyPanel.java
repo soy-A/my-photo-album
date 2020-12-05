@@ -37,23 +37,20 @@ public class MyPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "앨범이 추가되었습니다.");
 
 				} else {
-					JOptionPane.showMessageDialog(null, "이미 존재하는 앨범입니다.");
+					JOptionPane.showMessageDialog(null, "이미 존재하는 앨범입니다.");	// 이미 존재할 경우 추가하지 않는다
 				}
 
 			} else {
-
 				brought_name.add(newAlbumName);
 				oos = new ObjectOutputStream(new FileOutputStream(newAlbum_file));
 				oos.writeObject(brought_name);
-
 			}
 
 			oos.flush();
 			oos.close();
+			
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		}
 	}
 
@@ -65,7 +62,6 @@ public class MyPanel extends JPanel {
 		ObjectInputStream ois = null;
 
 		try {
-
 			if (newAlbum_file.exists()) {
 				ois = new ObjectInputStream(new FileInputStream(newAlbum_file));
 				brought_name = (Vector<String>) ois.readObject();
@@ -73,13 +69,9 @@ public class MyPanel extends JPanel {
 			}
 
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		} catch (ClassNotFoundException e) {
-
 			e.printStackTrace();
-
 		}
 
 		return brought_name;
@@ -95,21 +87,18 @@ public class MyPanel extends JPanel {
 		albumNames.remove(albumName);
 
 		try {
-
 			oos = new ObjectOutputStream(new FileOutputStream(newAlbum_file));
 			oos.writeObject(albumNames);
-			;
 			oos.close();
 
 			if (temp.exists()) {
 				temp.delete();
 			}
-
+			
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		}
+		
 		JOptionPane.showMessageDialog(null, "앨범이 삭제되었습니다.");
 	}
 
@@ -131,30 +120,32 @@ public class MyPanel extends JPanel {
 		west_panel.setBackground(Color.LIGHT_GRAY);
 		work_panel.add(west_panel, BorderLayout.WEST);
 
+		/* 새 창을 띄워 앨범을 추가하거나 삭제할 수 있다 */
 		JButton newAlbum_button = new JButton("앨범 추가/삭제");
 		newAlbum_button.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				new NewAlbumWindow();
 			}
 		});
 		west_panel.add(newAlbum_button);
 
-		JButton addPhoto_button = new JButton("사진 추가/삭제");
+		/* 새 창을 띄워 사진을 특정 앨범에 추가할 수 있다 */
+		JButton addPhoto_button = new JButton("사진 추가");
 		addPhoto_button.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				new AddPhotoPanel();
 			}
 		});
 		west_panel.add(addPhoto_button);
-		/*
-		 * JButton deletePhoto_button = new JButton("사진 삭제");
-		 * deletePhoto_button.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) { new
-		 * DeletePhotoPanel(); } }); west_panel.add(deletePhoto_button);
-		 */
+		
+		/* 새 창을 띄워 사진을 특정 앨범에서 삭제할 수 있다 */
+		JButton deletePhoto_button = new JButton("사진 삭제");
+		deletePhoto_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new DeletePhotoPanel();
+			}
+		});
+		west_panel.add(deletePhoto_button);
 
 		JLabel album_label = new JLabel("앨범을 선택하세요");
 		east_panel.add(album_label);
@@ -171,14 +162,16 @@ public class MyPanel extends JPanel {
 
 		JButton albumSelect_button = new JButton("확인");
 		albumSelect_button.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				String selectedAlbum = album_combobox.getSelectedItem().toString();
-				if (Key.bringKeys(selectedAlbum).size() > 0) {
+				
+				if (Key.bringKeys(selectedAlbum).size() > 0) {	// 선택한 앨범에 사진이 있다면 패널을 띄운다
 					center_panel.removeAll();
 					AllPanel myAlbum_panel = new AllPanel(Key.bringKeys(selectedAlbum));
 					center_panel.add(myAlbum_panel, BorderLayout.CENTER);
 					updateUI();
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "앨범에 사진이 없습니다.\n\"추가\"버튼을 눌러 사진을 추가해주세요.");
 				}
