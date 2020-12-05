@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 
 public class NewAlbumWindow extends JFrame {
 
+	/* 새 창을 띄워 앨범 추가/삭제 */
 	public NewAlbumWindow() {
 
 		setTitle("새로운 앨범 만들기");
@@ -27,7 +28,6 @@ public class NewAlbumWindow extends JFrame {
 
 		JButton newAlbumMake_button = new JButton("추가");
 		newAlbumMake_button.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				String newAlbumName = newAlbumName_field.getText();
 				MyPanel.addMyAlbum(newAlbumName);
@@ -51,7 +51,6 @@ public class NewAlbumWindow extends JFrame {
 
 		JButton deleteAlbumMake_button = new JButton("삭제");
 		deleteAlbumMake_button.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				String selectedAlbum = album_combobox.getSelectedItem().toString();
 				MyPanel.deleteMyAlbum(selectedAlbum);

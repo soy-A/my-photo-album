@@ -165,6 +165,7 @@ public class PhotoPanel extends JPanel {
 					Album.deleteFromAlbum((String) photoList.get(i).get("filefullname"));
 					Album.deleteFromMemo((String) photoList.get(i).get("filename"));
 					Key.deleteKey(photoList, photoList.get(i), "Key");
+					// myalbum에서 지우는코드 추가
 					JOptionPane.showMessageDialog(null, "사진이 삭제되었습니다.");
 					GUI.main_panel.removeAll();
 					GUI.all_panel = new AllPanel(Key.bringKeys("Key"));
@@ -186,6 +187,5 @@ public class PhotoPanel extends JPanel {
 			}
 		});
 		west_panel.add(back_button);
-
 	}
 }

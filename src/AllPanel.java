@@ -21,8 +21,6 @@ public class AllPanel extends JPanel {
 
 		setLayout(new BorderLayout(0, 0));
 
-		ArrayList<HashMap<String, Object>> fin_photoList = new ArrayList<HashMap<String, Object>>(photoList);
-
 		/* "모든 사진"의 패널, scrollPane */
 		JPanel image_panel = new JPanel();
 		Dimension panel_size = new Dimension(400, 2000); // 임시로 2000의 값을 주었다(스크롤이 생성되지 않는 문제)
@@ -33,35 +31,30 @@ public class AllPanel extends JPanel {
 		add(all_scrollPane, BorderLayout.CENTER);
 		all_scrollPane.setViewportView(image_panel);
 
-		/* bufferedImage의 사진들을 Label에 ImageIcon 타입으로 넣어줌 */
+		/* 아이콘으로 사용될 것 */
 		JLabel photo_label[] = new JLabel[photoList.size()];
 		ImageIcon photo_icon[] = new ImageIcon[photoList.size()];
 		Dimension icon_size = new Dimension(145, 145);
 
-		/* 이미지를 더블클릭했을 때 작동 */
+		/* 이미지를 더블클릭했을 때 작동 - photo_panel로 화면 전환 */
 		class Mouse implements MouseListener {
-
-			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					removeAll();
-					for (int j = 0; j < fin_photoList.size(); j++) {
+					for (int j = 0; j < photoList.size(); j++) {
 						if (e.getSource() == photo_label[j]) {
 							try {
 								Image image = ImageIO.read(new File(
-										Main.albumPath + File.separator + fin_photoList.get(j).get("filefullname")));
-								PhotoPanel photo_panel = new PhotoPanel(image, fin_photoList, j);
+										Main.albumPath + File.separator + photoList.get(j).get("filefullname")));
+								PhotoPanel photo_panel = new PhotoPanel(image, photoList, j);
 								add(photo_panel);
 							} catch (IOException e1) {
 								e1.getStackTrace();
 							}
-
 						}
 					}
-
 					updateUI();
 				}
-
 			}
 
 			public void mousePressed(MouseEvent e) {

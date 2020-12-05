@@ -20,11 +20,10 @@ public class GetPhoto {
 		File[] fileList;
 
 		if (userFile.exists() && userFile.isDirectory()) { // 존재하는 폴더인지 확인
-
 			fileList = userFile.listFiles(); // 폴더의 파일들을 리스트에 가져온다
 
 			for (File tempFile : fileList) {
-
+				
 				if (tempFile.isFile() && tempFile.length() > 0) {
 
 					/* 파일 이름, 년, 월, 일을 리스트에 저장 */

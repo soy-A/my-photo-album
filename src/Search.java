@@ -37,5 +37,4 @@ public class Search {
 		
 		return foundPhotoList;
 	}
-	
 }

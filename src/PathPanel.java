@@ -22,11 +22,6 @@ import javax.swing.JTextField;
 
 public class PathPanel extends JPanel {
 
-	private JTextField path_text;
-
-	/* 아래 두개는 스크롤 문제를 해결하지 못할 시 다시 코드 안쪽 (final)로 되돌려놓을 것 */
-	private int height;
-	private JScrollPane scrollPane;
 	private static ArrayList<HashMap<String, Object>> photoList = new ArrayList<HashMap<String, Object>>();
 
 	/* <사진 가져오기> 패널 */
@@ -42,13 +37,12 @@ public class PathPanel extends JPanel {
 		JLabel path_label = new JLabel("사진을 불러올 폴더의 경로를 입력해주세요");
 		pathget_panel.add(path_label);
 
-		path_text = new JTextField();
+		JTextField path_text = new JTextField();
 		pathget_panel.add(path_text);
 		path_text.setColumns(30);
 
 		JButton pathget_button = new JButton("불러오기");
 		pathget_button.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				String userPath = path_text.getText(); // 입력받은 경로
@@ -58,12 +52,10 @@ public class PathPanel extends JPanel {
 
 				/* <사진 가져오기 - 메인> 패널 */
 				JPanel image_panel = new JPanel();
-				height = image_panel.getHeight();
-//				Dimension panel_size = new Dimension(400, height);
 				Dimension panel_size = new Dimension(400, 2000); // 임시로 2000의 값을 주었다(스크롤이 생성되지 않는 문제)
 				image_panel.setPreferredSize(panel_size);
 				image_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-				scrollPane = new JScrollPane(image_panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane scrollPane = new JScrollPane(image_panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 						JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 				add(scrollPane, BorderLayout.CENTER);
 				scrollPane.setViewportView(image_panel);
@@ -75,9 +67,7 @@ public class PathPanel extends JPanel {
 				ArrayList<Integer> selected_index = new ArrayList<Integer>();
 
 				class PhotoItem implements ItemListener {
-
 					/* 선택된 사진을 표시하며, 선택된 인덱스를 저장 */
-					@Override
 					public void itemStateChanged(ItemEvent e) {
 						for (int i = 0; i < photoList.size(); i++) {
 							if (e.getItem() == photo_check[i]) {
@@ -96,7 +86,6 @@ public class PathPanel extends JPanel {
 						}
 					}
 				}
-
 				for (int i = 0; i < photoList.size(); i++) {
 					photo_check[i] = new JCheckBox();
 					photo_check[i].addItemListener(new PhotoItem());
@@ -108,23 +97,6 @@ public class PathPanel extends JPanel {
 					photo_check[i].setPreferredSize(icon_size);
 					image_panel.add(photo_check[i]);
 				}
-				/*
-				 * 이 위까지는 패널의 height가 0임, 그러나 한번 렌더링되면 height가 제대로 들어옴. 따라서 아래의
-				 * componentlistener를 잘 활용해 이 값을 가질 수 있도록 시도해볼 것
-				 * https://stackoverflow.com/questions/8336262/why-cant-i-access-my-panels-
-				 * getwidth-and-getheight-functions 를 참고
-				 */
-//				image_panel.addComponentListener(new ComponentAdapter() {
-//					public void componentResized(ComponentEvent e) {
-//						height = image_panel.getHeight();
-//						Dimension panel_size = new Dimension(400, height);
-//						image_panel.setPreferredSize(panel_size);
-//						scrollPane = new JScrollPane(image_panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//						add(scrollPane, BorderLayout.CENTER);
-//						scrollPane.setViewportView(image_panel);
-//						image_panel.requestFocusInWindow();
-//					}
-//				});
 
 				/* 경로 입력 패널 숨기기 */
 				pathget_panel.setVisible(false);
@@ -137,9 +109,7 @@ public class PathPanel extends JPanel {
 				add_panel.add(add_label);
 
 				JButton add_button = new JButton("추가");
-				add_button.addActionListener(new ActionListener() {
-
-					@Override
+				add_button.addActionListener(new ActionListener() {	// 선택된 파일들을 앨범에 추가한다
 					public void actionPerformed(ActionEvent e) {
 						File selected_photo[] = new File[selected_index.size()];
 						ArrayList<HashMap<String, Object>> selected_list = new ArrayList<HashMap<String, Object>>();
@@ -149,11 +119,11 @@ public class PathPanel extends JPanel {
 									+ photoList.get(selected_index.get(i)).get("filefullname"));
 							selected_list.add(i, photoList.get(selected_index.get(i)));
 						}
+						
 						Album.addToAlbum(selected_photo, Main.albumPath);
 						Key.addToKey(selected_list, "Key");
 						JOptionPane.showMessageDialog(null, "사진이 추가되었습니다.");
 					}
-
 				});
 				add_panel.add(add_button);
 				add_panel.setVisible(true);
@@ -161,7 +131,5 @@ public class PathPanel extends JPanel {
 			}
 		});
 		pathget_panel.add(pathget_button);
-
 	}
-
 }

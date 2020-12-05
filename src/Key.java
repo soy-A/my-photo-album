@@ -17,38 +17,27 @@ public class Key {
 		ObjectOutputStream oos = null;
 
 		try {
-
 			if (album_Key.exists()) {
-
 				brought_list = bringKeys(Key);
 
 				for (int i = 0; i < selected_list.size(); i++) {
-
 					if (!brought_list.contains(selected_list.get(i))) {
-
 						brought_list.add(selected_list.get(i));
-
 					}
-
 				}
-
 				oos = new ObjectOutputStream(new FileOutputStream(album_Key));
 				oos.writeObject(brought_list);
 
 			} else {
-
 				oos = new ObjectOutputStream(new FileOutputStream(album_Key));
 				oos.writeObject(selected_list);
-
 			}
 
 			oos.flush();
 			oos.close();
 
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		}
 	}
 
@@ -60,7 +49,6 @@ public class Key {
 		ObjectInputStream ois = null;
 
 		try {
-
 			if (album_Key.exists()) {
 				ois = new ObjectInputStream(new FileInputStream(album_Key));
 				key = (ArrayList<HashMap<String, Object>>) ois.readObject();
@@ -68,13 +56,9 @@ public class Key {
 			}
 
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		} catch (ClassNotFoundException e) {
-
 			e.printStackTrace();
-
 		}
 
 		return key;
@@ -89,16 +73,12 @@ public class Key {
 		photoList.remove(photo);
 
 		try {
-
 			oos = new ObjectOutputStream(new FileOutputStream(album_Key));
 			oos.writeObject(photoList);
-			;
 			oos.close();
 
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		}
 	}
 
@@ -113,16 +93,12 @@ public class Key {
 		}
 
 		try {
-
 			oos = new ObjectOutputStream(new FileOutputStream(myAlbum));
 			oos.writeObject(albumList);
-			;
 			oos.close();
 
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		}
 	}
 }
