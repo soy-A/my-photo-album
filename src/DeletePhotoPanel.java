@@ -56,8 +56,8 @@ public class DeletePhotoPanel extends JFrame {
 				JButton delete_button = new JButton("삭제");
 				delete_button.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						ArrayList<HashMap<String, Object>> photoList = Key.bringKeys(album_combobox.getSelectedItem().toString());
 						String selectedAlbum = album_combobox.getSelectedItem().toString();
+						ArrayList<HashMap<String, Object>> photoList = Key.bringKeys(selectedAlbum);
 						ArrayList<HashMap<String, Object>> selected_list = new ArrayList<HashMap<String, Object>>();
 
 						for (int i = 0; i < selected_index.size(); i++) {
@@ -74,7 +74,7 @@ public class DeletePhotoPanel extends JFrame {
 				
 				ArrayList<HashMap<String, Object>> photoList = Key.bringKeys(album_combobox.getSelectedItem().toString());
 				JPanel image_panel = new JPanel();
-				Dimension panel_size = new Dimension(400, 2000); // 임시로 2000의 값을 주었다(스크롤이 생성되지 않는 문제)
+				Dimension panel_size = new Dimension(400, 2000);
 				image_panel.setPreferredSize(panel_size);
 				image_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 				JScrollPane scrollPane = new JScrollPane(image_panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -115,7 +115,7 @@ public class DeletePhotoPanel extends JFrame {
 					photo_check[i].addItemListener(new PhotoItem());
 					photo_check[i].setBackground(Color.DARK_GRAY);
 					photo_icon[i] = new ImageIcon(
-							Main.albumPath + File.separator + photoList.get(i).get("filefullname"));
+							Main.getAlbumPath() + File.separator + photoList.get(i).get("filefullname"));
 					Image img = photo_icon[i].getImage().getScaledInstance(135, 135, Image.SCALE_SMOOTH);
 					photo_icon[i] = new ImageIcon(img);
 					photo_check[i].setIcon(photo_icon[i]);

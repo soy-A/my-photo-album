@@ -44,7 +44,7 @@ public class AddPhotoPanel extends JFrame {
 		message_panel.add(message_label);
 
 		JPanel image_panel = new JPanel();
-		Dimension panel_size = new Dimension(400, 2000); // 임시로 2000의 값을 주었다(스크롤이 생성되지 않는 문제)
+		Dimension panel_size = new Dimension(400, 2000);
 		image_panel.setPreferredSize(panel_size);
 		image_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		JScrollPane scrollPane = new JScrollPane(image_panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -84,7 +84,7 @@ public class AddPhotoPanel extends JFrame {
 			photo_check[i] = new JCheckBox();
 			photo_check[i].addItemListener(new PhotoItem());
 			photo_check[i].setBackground(Color.DARK_GRAY);
-			photo_icon[i] = new ImageIcon(Main.albumPath + File.separator + photoList.get(i).get("filefullname"));
+			photo_icon[i] = new ImageIcon(Main.getAlbumPath() + File.separator + photoList.get(i).get("filefullname"));
 			Image img = photo_icon[i].getImage().getScaledInstance(135, 135, Image.SCALE_SMOOTH);
 			photo_icon[i] = new ImageIcon(img);
 			photo_check[i].setIcon(photo_icon[i]);

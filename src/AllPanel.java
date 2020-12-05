@@ -23,7 +23,7 @@ public class AllPanel extends JPanel {
 
 		/* "모든 사진"의 패널, scrollPane */
 		JPanel image_panel = new JPanel();
-		Dimension panel_size = new Dimension(400, 2000); // 임시로 2000의 값을 주었다(스크롤이 생성되지 않는 문제)
+		Dimension panel_size = new Dimension(400, 2000);
 		image_panel.setPreferredSize(panel_size);
 		image_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		JScrollPane all_scrollPane = new JScrollPane(image_panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -45,7 +45,7 @@ public class AllPanel extends JPanel {
 						if (e.getSource() == photo_label[j]) {
 							try {
 								Image image = ImageIO.read(new File(
-										Main.albumPath + File.separator + photoList.get(j).get("filefullname")));
+										Main.getAlbumPath() + File.separator + photoList.get(j).get("filefullname")));
 								PhotoPanel photo_panel = new PhotoPanel(image, photoList, j);
 								add(photo_panel);
 							} catch (IOException e1) {
@@ -73,7 +73,7 @@ public class AllPanel extends JPanel {
 
 		for (int i = 0; i < photoList.size(); i++) { // photoList의 사진들의 아이콘을 띄운다
 
-			photo_icon[i] = new ImageIcon(Main.albumPath + File.separator + photoList.get(i).get("filefullname"));
+			photo_icon[i] = new ImageIcon(Main.getAlbumPath() + File.separator + photoList.get(i).get("filefullname"));
 			Image img = photo_icon[i].getImage().getScaledInstance(135, 135, Image.SCALE_SMOOTH);
 			photo_icon[i] = new ImageIcon(img);
 			photo_label[i] = new JLabel(photo_icon[i]);
