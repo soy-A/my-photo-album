@@ -7,14 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.swing.JTextArea;
-
 public class Album {
 	
 	/* 파일을 관리할 폴더 만듦 */
 	public static String makedir(String dirName) {
 		
-		final String path = System.getProperty("user.dir") + File.separator + dirName;
+		String path = System.getProperty("user.dir") + File.separator + dirName;
 		File folder = new File(path);
 
 		if (!folder.exists()) { // 폴더가 존재하지 않는 경우에만 새로 생성함
@@ -29,7 +27,7 @@ public class Album {
 	}
 
 	/* 앨범에 추가 */
-	public static void addToAlbum(File[] targetFiles, String albumPath) { // 선택한 파일들은 파일리스트에 넣어둘 것
+	public static void addToAlbum(File[] targetFiles, String albumPath) {
 
 		for (File file : targetFiles) {
 			File temp = new File(albumPath + File.separator + file.getName());
@@ -65,7 +63,7 @@ public class Album {
 	/* 앨범에서 삭제 */
 	public static void deleteFromAlbum(String fileName) {
 
-		File temp = new File(Main.albumPath + File.separator + fileName);
+		File temp = new File(Main.getAlbumPath() + File.separator + fileName);
 
 		try {
 			temp.delete();
@@ -95,7 +93,7 @@ public class Album {
 	/* 파일을 삭제할 때 메모도 같이 삭제함 */
 	public static void deleteFromMemo(String fileName) {
 
-		File temp = new File(Main.albumPath + File.separator + "memo" + File.separator + fileName + ".txt");
+		File temp = new File(Main.getAlbumPath() + File.separator + "memo" + File.separator + fileName + ".txt");
 
 		try {
 			if (temp.exists()) {
@@ -108,30 +106,10 @@ public class Album {
 	}
 
 	/* 저장된 메모를 읽어옴 */
-	public static void getSavedMemo(String fileName, JTextArea textArea) {
-		
-		String memoPath = Main.albumPath + File.separator + "memo";
-
-		try {
-			FileReader fr = new FileReader(memoPath + File.separator + fileName + ".txt");
-			BufferedReader br = new BufferedReader(fr);
-			String str = null;
-
-			while ((str = br.readLine()) != null) {
-				textArea.append(str + "\n");
-			}
-			br.close();
-
-		} catch (Exception e) {
-			e.getStackTrace();
-		}
-	}
-
-	/* 저장된 메모를 읽어옴(String) */
-	public static String getSavedMemo_str(String fileName) {
+	public static String getSavedMemo(String fileName) {
 
 		String string = "";
-		String memoPath = Main.albumPath + File.separator + "memo";
+		String memoPath = Main.getAlbumPath() + File.separator + "memo";
 
 		try {
 			FileReader fr = new FileReader(memoPath + File.separator + fileName + ".txt");
@@ -139,7 +117,7 @@ public class Album {
 			String str;
 
 			while ((str = br.readLine()) != null) {
-				string = string + "\n" + str;
+				string = string + str + "\n";
 			}
 			br.close();
 
