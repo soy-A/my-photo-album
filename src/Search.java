@@ -24,7 +24,7 @@ public class Search {
 			}
 		} else if (type.equals("메모")) {
 			for (HashMap<String, Object> photo : Key.bringKeys("Key")) {
-				String memo = Album.getSavedMemo_str((String) photo.get("filename"));
+				String memo = Album.getSavedMemo((String) photo.get("filename"));
 				if (memo != null && memo.contains(searchTerm)) {
 					foundPhotoList.add(photo);
 				}
