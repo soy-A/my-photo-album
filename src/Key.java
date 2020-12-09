@@ -6,13 +6,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 public class Key {
 
 	/* 선택한 사진들의 key-value 정보를 key파일로 내보냄 */
 	public static void addToKey(ArrayList<HashMap<String, Object>> selected_list, String Key) {
 
-		File album_Key = new File(Main.albumPath + File.separator + Key);
+		File album_Key = new File(Main.getAlbumPath() + File.separator + Key);
 		ArrayList<HashMap<String, Object>> brought_list = new ArrayList<HashMap<String, Object>>();
 		ObjectOutputStream oos = null;
 
@@ -44,7 +45,7 @@ public class Key {
 	/* key파일로부터 key-value값을 읽어옴 */
 	public static ArrayList<HashMap<String, Object>> bringKeys(String Key) {
 
-		File album_Key = new File(Main.albumPath + File.separator + Key);
+		File album_Key = new File(Main.getAlbumPath() + File.separator + Key);
 		ArrayList<HashMap<String, Object>> key = new ArrayList<HashMap<String, Object>>();
 		ObjectInputStream ois = null;
 
@@ -68,7 +69,7 @@ public class Key {
 	public static void deleteKey(ArrayList<HashMap<String, Object>> photoList, HashMap<String, Object> photo,
 			String Key) {
 
-		File album_Key = new File(Main.albumPath + File.separator + Key);
+		File album_Key = new File(Main.getAlbumPath() + File.separator + Key);
 		ObjectOutputStream oos = null;
 		photoList.remove(photo);
 
@@ -84,7 +85,7 @@ public class Key {
 
 	public static void deleteKeyFromAlbum(ArrayList<HashMap<String, Object>> selectedList, String myAlbumName) {
 
-		File myAlbum = new File(Main.albumPath + File.separator + myAlbumName);
+		File myAlbum = new File(Main.getAlbumPath() + File.separator + myAlbumName);
 		ObjectOutputStream oos = null;
 		ArrayList<HashMap<String, Object>> albumList = Key.bringKeys(myAlbumName);
 
@@ -99,6 +100,34 @@ public class Key {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void findAndDeleteKeyFromAlbum(HashMap<String, Object> photo) {
+
+		Vector<String> albumNames = MyPanel.bringAlbumNames();
+		
+		for(String albumName : albumNames) {
+			ArrayList<HashMap<String, Object>> albumList = Key.bringKeys(albumName);
+			
+			if(albumList.contains(photo)) {
+				ObjectOutputStream oos = null;
+				File myAlbum = new File(Main.getAlbumPath() + File.separator + albumName);
+				
+				for(HashMap<String, Object> photoInAlbum : albumList) {
+					if (photoInAlbum.equals(photo)) {
+						albumList.remove(photo);
+					}
+				}
+				try {
+					oos = new ObjectOutputStream(new FileOutputStream(myAlbum));
+					oos.writeObject(albumList);
+					oos.close();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }
