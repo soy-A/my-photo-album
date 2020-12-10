@@ -21,7 +21,7 @@ public class MyPanel extends JPanel {
 	/* 앨범 이름 파일에 새로운 앨범 이름 추가 */
 	public static void addMyAlbum(String newAlbumName) {
 
-		File newAlbum_file = new File(Main.albumPath + File.separator + "myAlbum");
+		File newAlbum_file = new File(Main.getAlbumPath() + File.separator + "myAlbum");
 
 		Vector<String> brought_name = new Vector<String>();
 		ObjectOutputStream oos = null;
@@ -57,7 +57,7 @@ public class MyPanel extends JPanel {
 	/* 앨범 이름 파일 가져오기 */
 	public static Vector<String> bringAlbumNames() {
 
-		File newAlbum_file = new File(Main.albumPath + File.separator + "myAlbum");
+		File newAlbum_file = new File(Main.getAlbumPath() + File.separator + "myAlbum");
 		Vector<String> brought_name = new Vector<String>();
 		ObjectInputStream ois = null;
 
@@ -80,8 +80,8 @@ public class MyPanel extends JPanel {
 	/* 나의 앨범과 앨범에 들어있는 사진에 대한 정보 삭제 */
 	public static void deleteMyAlbum(String albumName) {
 
-		File newAlbum_file = new File(Main.albumPath + File.separator + "myAlbum");
-		File temp = new File(Main.albumPath + File.separator + albumName);
+		File newAlbum_file = new File(Main.getAlbumPath() + File.separator + "myAlbum");
+		File temp = new File(Main.getAlbumPath() + File.separator + albumName);
 		ObjectOutputStream oos = null;
 		Vector<String> albumNames = bringAlbumNames();
 		albumNames.remove(albumName);
