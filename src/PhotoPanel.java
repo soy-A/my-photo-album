@@ -106,7 +106,7 @@ public class PhotoPanel extends JPanel {
 		JButton memo_button = new JButton("메모");
 		memo_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String memoPath = Main.albumPath + File.separator + "memo";
+				String memoPath = Main.getAlbumPath() + File.separator + "memo";
 				
 				big_image_panel.removeAll();
 				big_image_panel.setLayout(new BorderLayout(0, 0));
@@ -126,7 +126,7 @@ public class PhotoPanel extends JPanel {
 				File temp = new File(
 						memoPath + File.separator + (String) photoList.get(i).get("filename") + ".txt");
 				if (temp.exists()) {	// 메모가 존재하는 경우에만 불러온다
-					Album.getSavedMemo((String) photoList.get(i).get("filename"), memo_textArea);
+					memo_textArea.append(Album.getSavedMemo((String) photoList.get(i).get("filename")));
 				}
 				memo_scroll.setViewportView(memo_textArea);
 
@@ -159,13 +159,15 @@ public class PhotoPanel extends JPanel {
 		JButton delete_button = new JButton("삭제");
 		delete_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<HashMap<String, Object>> likedList = Key.bringKeys("Like");
 				int delete = JOptionPane.showConfirmDialog(null, "정말로 삭제하시겠습니까?", "삭제", JOptionPane.YES_NO_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 				if (delete == JOptionPane.YES_OPTION) {
 					Album.deleteFromAlbum((String) photoList.get(i).get("filefullname"));
 					Album.deleteFromMemo((String) photoList.get(i).get("filename"));
 					Key.deleteKey(photoList, photoList.get(i), "Key");
-					// myalbum에서 지우는코드 추가
+					Key.deleteKey(likedList, photoList.get(i), "Like");
+					Key.findAndDeleteKeyFromAlbum(photoList.get(i));
 					JOptionPane.showMessageDialog(null, "사진이 삭제되었습니다.");
 					GUI.main_panel.removeAll();
 					GUI.all_panel = new AllPanel(Key.bringKeys("Key"));
