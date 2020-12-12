@@ -52,7 +52,7 @@ public class PathPanel extends JPanel {
 
 				/* <사진 가져오기 - 메인> 패널 */
 				JPanel image_panel = new JPanel();
-				Dimension panel_size = new Dimension(400, 2000); // 임시로 2000의 값을 주었다(스크롤이 생성되지 않는 문제)
+				Dimension panel_size = new Dimension(400, 2000);
 				image_panel.setPreferredSize(panel_size);
 				image_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 				JScrollPane scrollPane = new JScrollPane(image_panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -120,7 +120,7 @@ public class PathPanel extends JPanel {
 							selected_list.add(i, photoList.get(selected_index.get(i)));
 						}
 						
-						Album.addToAlbum(selected_photo, Main.albumPath);
+						Album.addToAlbum(selected_photo, Main.getAlbumPath());
 						Key.addToKey(selected_list, "Key");
 						JOptionPane.showMessageDialog(null, "사진이 추가되었습니다.");
 					}
