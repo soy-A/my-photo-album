@@ -1,6 +1,10 @@
 public class Main {
 
-	static String albumPath;
+	private static String albumPath;
+	
+	public static String getAlbumPath() {
+		return albumPath;
+	}
 
 	public static void main(String[] args) {
 
